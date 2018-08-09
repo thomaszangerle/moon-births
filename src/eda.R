@@ -2,11 +2,15 @@
 library(tidyverse)
 library(lubridate)
 
-births <- read_delim("data/TF_BIRTHS.txt", "|")
-glimpse(births)
-head(births)
+births <- read_csv("results/moon-births.csv")
 
-moon <- read_csv("data/moon-phases-2008-2016-Europe_Brussels.csv")
-glimpse(moon)
+levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 
-mutate(moon, date = date(datetime))
+births <- births %>% 
+  mutate(weekday = factor(weekdays(date), levels = levels))
+
+ggplot(births, aes(date, num_births)) +
+  geom_point()
+
+ggplot(births, aes(weekday, num_births)) + 
+  geom_boxplot()
